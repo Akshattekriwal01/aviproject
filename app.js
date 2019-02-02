@@ -57,7 +57,7 @@ app.get("/", function (req, res) {
             console.log("some mannual error 1");
 
         var courseListString = "";
-        var course = "AASP398Q,AASP398Z,AASP402,AASP441,AASP443,AASP478N,AASP498J";           
+                 
 
         courseList.forEach(x => {
             courseListString = courseListString + x + ",";
@@ -66,8 +66,32 @@ app.get("/", function (req, res) {
         request("https://api.umd.io/v0/courses/cmsc132?expand=sections", function (error, response, body) {
             console.log("connectiong with umd id sections");    
         var parsedData1 = JSON.parse(body);
-
-           console.log(parsedData1.sections[0].meetings[0].room);
+        for(var i  = 0; i < parsedData1.sections.length; i++){
+            for(var j = 0; j < parsedData1.sections[i].meetings.length ; j++)
+            {   var objArray = [];              
+                if(j==0){                    
+                    objArray.push(parsedData1.sections[i].section_id+"L");
+                }
+               else{
+                    objArray.push(parsedData1.sections[i].section_id+"D");
+               }
+                objArray.push(parsedData1.sections[i].meetings[j].days);
+                objArray.push(parsedData1.sections[i].meetings[j].start_time);
+                objArray.push(parsedData1.sections[i].meetings[j].end_time);
+                objArray.push(parsedData1.sections[i].meetings[j].building);
+                objArray.push(parsedData1.sections[i].meetings[j].room);
+            
+                console.log("===================")
+                for(var c = 0 ; c< objArray.length; c++)    
+                console.log(objArray[c]);
+                console.log("===================")
+            }
+       
+            
+      
+            }  
+        
+        
         res.send(body);
 
         });
